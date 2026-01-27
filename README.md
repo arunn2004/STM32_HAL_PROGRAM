@@ -59,3 +59,34 @@ HAL driver code	MCU vendor (ST, Espressif, NXP)
 HAL API functions	Vendor
 Application logic	You (developer)
 
+
+
+7 ] InitStruct = structure used to store peripheral configuration settings
+
+In embedded systems, a peripheral needs many settings:
+Mode
+Speed
+Pull-up / pull-down
+Clock source
+Output type
+Instead of passing 10–15 parameters to a function, HAL uses one structure.
+One peripheral  →  One InitStruct
+
+### Think of it like this 👇
+Before using hardware (GPIO, UART, TIMER), you must tell the MCU **how it should work**.
+Instead of giving many instructions one by one, HAL puts all settings into **one structure** → **InitStruct**.
+
+
+8] Meaning of static (for functions)
+Key idea
+
+static limits visibility (scope) of a function.
+
+static void MX_GPIO_Init(void);
+
+
+Means:
+
+Function is usable only inside this file (main.c)
+
+Cannot be accessed from other .c files
