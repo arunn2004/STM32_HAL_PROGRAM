@@ -1,0 +1,101 @@
+ HAL ADC Logic: 
+1] Basic ADC Single Read: 
+
+c
+while (1)
+{
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 100);
+    uint32_t adc_value = HAL_ADC_GetValue(&hadc1);
+    HAL_ADC_Stop(&hadc1);
+    
+    HAL_Delay(500);
+}
+/* USER CODE END 3 */
+
+2] ADC Read with LED Control Based on Value
+
+c
+while (1)
+{
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 100);
+    uint32_t adc_value = HAL_ADC_GetValue(&hadc1);
+    HAL_ADC_Stop(&hadc1);
+    
+    if(adc_value > 2048)
+    {
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
+    }
+    else
+    {
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_RESET);
+    }
+    
+    HAL_Delay(100);
+}
+/* USER CODE END 3 */
+
+3] ADC Multi-Channel Read
+
+c
+while (1)
+{
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+    uint32_t adc_ch1, adc_ch2;
+    
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 100);
+    adc_ch1 = HAL_ADC_GetValue(&hadc1);
+    
+    HAL_ADC_PollForConversion(&hadc1, 100);
+    adc_ch2 = HAL_ADC_GetValue(&hadc1);
+    HAL_ADC_Stop(&hadc1);
+    
+    HAL_Delay(200);
+}
+/* USER CODE END 3 */
+4] ADC DMA Continuous Mode
+
+c
+uint32_t adc_dma_buffer[1];
+
+/* Before while loop - in main after HAL_Init */
+HAL_ADC_Start_DMA(&hadc1, adc_dma_buffer, 1);
+
+while (1)
+{
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+    uint32_t adc_value = adc_dma_buffer[0];
+    
+    HAL_Delay(100);
+}
+/* USER CODE END 3 */
+5] ADC with Voltage Calculation (12-bit, 3.3V Reference)
+
+c
+while (1)
+{
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 100);
+    uint32_t adc_value = HAL_ADC_GetValue(&hadc1);
+    HAL_ADC_Stop(&hadc1);
+    
+    float voltage = (adc_value * 3.3) / 4095.0;
+    
+    HAL_Delay(500);
+}
+/* USER CODE END 3 */
