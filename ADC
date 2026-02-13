@@ -99,3 +99,44 @@ while (1)
     HAL_Delay(500);
 }
 /* USER CODE END 3 */
+_______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+Definition:
+while (1) : Creates infinite loop - Program runs forever, never stops.
+HAL_ADC_Start(&hadc1): Starts the ADC peripheral - Wakes up ADC1 and prepares it to begin analog-to-digital conversion.
+HAL_ADC_PollForConversion(&hadc1, 100):  Waits for conversion to complete - CPU keeps checking if ADC finished converting. Maximum wait time is 100ms (timeout). If conversion takes longer than 100ms, it stops waiting.
+
+uint32_t adc_value = HAL_ADC_GetValue(&hadc1);
+Reads the converted digital value - Gets the result (0 to 4095 for 12-bit ADC) and stores it in variable adc_value. This is the digital representation of the analog voltage.
+
+HAL_ADC_Stop(&hadc1): Stops the ADC peripheral - Turns off ADC1 to save power. Good practice in polling mode.
+
+
+
+HAL_Delay(500) :  Waits 500 milliseconds - Creates a delay before next reading. This means ADC reads happen every 500ms (2 times per second).
+Loop repeats - Goes back to start of while loop and does everything again continuously.
+
+
+2] DMA Buffer
+What is DMA? DMA = Direct Memory Access
+DMA is a hardware feature that transfers data from one place to another without using the CPU.
+What is DMA Buffer? A DMA buffer is a memory array where DMA automatically stores ADC values without CPU help.
+
+DMA = Handling and Storage of Data WITHOUT Using CPU
+
+Breaking It Down:
+Without DMA (CPU Does Everything):
+ADC converts voltage → digital value
+CPU stops what it's doing
+CPU reads the ADC value
+CPU stores it in memory (buffer)
+CPU waits for next conversion
+Repeat...
+Problem: CPU is busy and blocked doing data transfer work.
+
+With DMA (DMA Does the Work):
+ADC converts voltage → digital value
+DMA automatically reads the ADC value
+DMA automatically stores it in buffer
+CPU continues doing other important tasks (calculations, controlling motors, etc.)
+DMA repeats automatically in background
+Benefit: CPU is free to do other things!
